@@ -1,7 +1,7 @@
 name: GitHub Actions Demo2
 run-name: ${{ github.actor }} checking your dependencies 🚀
 
-on: workflow_dispatch
+on: push
 
 jobs:
     hello:
@@ -10,6 +10,4 @@ jobs:
             - name: checkout
               uses: actions/checkout@v4
             - name: my own action
-              uses: .github/actions/waiting-for-dependencies-action/
-            - name: Waiting for dependency update label not found
-              run: exit 0
+              uses: /.github/actions/waiting-for-dependencies-action/
