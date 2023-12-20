@@ -9,4 +9,4 @@ jobs:
             - name: checkout
               uses: actions/checkout@v4
             - name: my own action
-              uses: ./.github/actions/waiting-for-dependencies-action/
+              uses: .github/actions/waiting-for-dependencies-action/
