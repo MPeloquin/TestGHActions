@@ -4,6 +4,9 @@ on: [push]
 jobs:
     hello:
         runs-on: ubuntu-latest
+
         steps:
-            - uses actions/checkout@v4
-            - ./.github/actions/waiting-for-dependencies-action/
+            - name: checkout
+              uses: actions/checkout@v4
+            - name: my own action
+              uses: ./.github/actions/waiting-for-dependencies-action/
