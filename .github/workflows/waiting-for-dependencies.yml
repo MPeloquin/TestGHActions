@@ -1,6 +1,8 @@
 name: GitHub Actions Demo2
 run-name: ${{ github.actor }} checking your dependencies 🚀
-on: [push]
+
+on: workflow_dispatch
+
 jobs:
     hello:
         runs-on: ubuntu-latest
