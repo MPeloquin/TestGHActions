@@ -1,0 +1,9 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
+jobs:
+    hello:
+        runs-on: ubuntu-latest
+        steps:
+            - uses actions/checkout@v4
+            - ./.github/actions/waiting-for-dependencies-action/

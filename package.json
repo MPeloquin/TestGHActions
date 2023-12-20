@@ -1,0 +1,23 @@
+{
+    "name": "testghactions",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/MPeloquin/TestGHActions.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/MPeloquin/TestGHActions/issues"
+    },
+    "homepage": "https://github.com/MPeloquin/TestGHActions#readme",
+    "dependencies": {
+        "@landr/pricing": "2.226.1-fix-CORE-11600-plugins-perpetual-upsell-5460.0",
+        "typescript": "^5.3.3"
+    }
+}
