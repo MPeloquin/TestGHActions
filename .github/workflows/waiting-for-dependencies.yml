@@ -16,7 +16,9 @@ jobs:
             - name: Check dependencies
               uses: ./.github/actions/check-dependencies-in-progress/
               id: check-dependencies
-            - run: gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
+            - run: |
+                gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
+                exit 1
               if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
