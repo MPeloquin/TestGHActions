@@ -1,4 +1,4 @@
-name: Checking for dependencies updates
+name: Up-to-date dependencies check
 
 on:
   pull_request:
@@ -14,16 +14,18 @@ jobs:
             - name: checkout
               uses: actions/checkout@v4
             - name: Check dependencies
-              uses: ./.github/actions/check-dependencies-in-progress/
               id: check-dependencies
-            - run: |
+              uses: ./.github/actions/check-dependencies-in-progress/
+            - name: Add label
+              run: |
                 gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
                 exit 1
               if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 GH_REPO: ${{ github.repository }}
-            - run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "Waiting For Dependency Update"
+            - name: Remove label
+              run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "Waiting For Dependency Update"
               if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

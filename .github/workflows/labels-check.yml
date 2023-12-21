@@ -1,7 +1,7 @@
 name: dependencies-label-check
 
 on:
-    workflow_run: 
+    workflow_run:
 
 jobs:
     check-waiting-for-dependency:
