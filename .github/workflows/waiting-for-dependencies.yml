@@ -18,14 +18,13 @@ jobs:
             - name: Add label
               run: |
                 gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
-                exit 1
               if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
               env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_TOKEN: ${{ secrets.PAT }}
                 GH_REPO: ${{ github.repository }}
             - name: Remove label
               run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "Waiting For Dependency Update"
               if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
               env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_TOKEN: ${{ secrets.PAT }}
                 GH_REPO: ${{ github.repository }}
