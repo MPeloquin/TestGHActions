@@ -2,9 +2,8 @@ name: Check for dependencies updates
 run-name: ${{ github.actor }} checking your dependencies 🚀
 
 on:
-  pull_request:
-    paths:
-      - '**/package.json'
+  pull_request
+
 
 jobs:
     hello:
