@@ -19,5 +19,8 @@
     "dependencies": {
         "@landr/account-mfe": "2.226.1-fix-CORE-11600-plugins-perpetual-upsell-5460.0",
         "typescript": "^5.3.3"
+    },
+    "devDependencies": {
+        "@landr/dev-account-mfe": "2.226.1-fix-CORE-11600-plugins-perpetual-upsell-5460.0"
     }
 }

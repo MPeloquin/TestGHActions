@@ -16,11 +16,21 @@
     "bugs": {
         "url": "https://github.com/MPeloquin/TestGHActions/issues"
     },
+    "prettier": {
+        "singleQuote": true,
+        "printWidth": 80,
+        "editor.formatOnSave": true,
+        "proseWrap": "always",
+        "tabWidth": 4,
+        "requireConfig": false,
+        "useTabs": false,
+        "trailingComma": "none",
+        "bracketSpacing": true,
+        "jsxBracketSameLine": false,
+        "semi": true
+    },
     "homepage": "https://github.com/MPeloquin/TestGHActions#readme",
     "devDependencies": {
-        "@actions/github": "~6.0.0",
-        "@actions/core": "~1.10.1"
-    },
-    "dependencies": {
+        "prettier": "^3.1.1"
     }
 }
