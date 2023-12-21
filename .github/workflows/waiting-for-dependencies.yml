@@ -9,8 +9,8 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v4
-            - name: hello
+            - name: Check dependencies
               uses: ./.github/actions/waiting-for-dependencies-action/
-              id: hello
+              id: dependencies
             - name: Get the output time
-              run: echo "The time was ${{ steps.hello.outputs.time }}"
+              run: echo "The time was ${{ steps.dependencies.outputs.in-progress-dependency-found }}"
