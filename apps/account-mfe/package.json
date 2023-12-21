@@ -1,10 +1,9 @@
 {
-    "name": "testghactions",
+    "name": "account-mfe",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
-        "c": "git add . && git commit -m 'test' && git push",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
