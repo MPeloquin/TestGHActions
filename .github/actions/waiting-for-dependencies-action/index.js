@@ -135,19 +135,16 @@ function toCommandValue(input) {
     return JSON.stringify(input)
 }
 
-function setOutput(key, value) {
+export function setOutput(name, value) {
     const filePath = process.env['GITHUB_OUTPUT'] || ''
-    console.log(filePath)
-
     if (filePath) {
         return issueFileCommand('OUTPUT', prepareKeyValueMessage(name, value))
     }
 
-    console.log("not filepath")
-
     process.stdout.write(os.EOL)
     issueCommand('set-output', {name}, toCommandValue(value))
 }
+
 
 function issueFileCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`]
