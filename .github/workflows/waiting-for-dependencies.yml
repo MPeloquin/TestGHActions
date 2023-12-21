@@ -13,7 +13,7 @@ jobs:
             - name: checkout
               uses: actions/checkout@v4
               with:
-                filter-regex: 'package.json'
+                sparse-checkout: 'package.json'
             - name: Check dependencies
               uses: ./.github/actions/check-dependencies-in-progress/
               id: check-dependencies
