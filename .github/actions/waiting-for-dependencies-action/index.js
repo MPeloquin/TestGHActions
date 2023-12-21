@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const os = require("os");
 
+let found = false;
+
 function searchForVersion(rootFolder, depth = 0) {
     if (depth >= 3) {
         return;
@@ -9,7 +11,7 @@ function searchForVersion(rootFolder, depth = 0) {
     const files = fs.readdirSync(rootFolder);
 
     files.forEach((file) => {
-        if (file === '.git' || file === '.github') {
+        if (file === '.git' || file === '.github' || found) {
             return;
         }
         const filePath = path.join(rootFolder, file);
@@ -105,45 +107,18 @@ class Command {
 }
 function prepareKeyValueMessage(key, value) {
     const delimiter = `ghadelimiter_${123}`
-    const convertedValue = toCommandValue(value)
-
-    // These should realistically never happen, but just in case someone finds a
-    // way to exploit uuid generation let's not allow keys or values that contain
-    // the delimiter.
-    if (key.includes(delimiter)) {
-        throw new Error(
-            `Unexpected input: name should not contain the delimiter "${delimiter}"`
-        )
-    }
-
-    if (convertedValue.includes(delimiter)) {
-        throw new Error(
-            `Unexpected input: value should not contain the delimiter "${delimiter}"`
-        )
-    }
-
-    return `${key}<<${delimiter}${os.EOL}${convertedValue}${os.EOL}${delimiter}`
-}
-
-
-function toCommandValue(input) {
-    if (input === null || input === undefined) {
-        return ''
-    } else if (typeof input === 'string' || input instanceof String) {
-        return input
-    }
-    return JSON.stringify(input)
+    return `${key}<<${delimiter}${os.EOL}${value}${os.EOL}${delimiter}`
 }
 
  function setOutput(name, value) {
     const filePath = process.env['GITHUB_OUTPUT'] || ''
-     console.log(filePath, name, value)
+
     if (filePath) {
-        return issueFileCommand('OUTPUT', prepareKeyValueMessage(name, value))
+        //return issueFileCommand('OUTPUT', prepareKeyValueMessage(name, value))
     }
 
     process.stdout.write(os.EOL)
-    issueCommand('set-output', {name}, toCommandValue(value))
+    issueCommand('set-output', {name}, value)
 }
 
 
