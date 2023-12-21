@@ -105,46 +105,18 @@ class Command {
         return cmdStr
     }
 }
-function prepareKeyValueMessage(key, value) {
-    const delimiter = `ghadelimiter_${123}`
-    return `${key}<<${delimiter}${os.EOL}${value}${os.EOL}${delimiter}`
-}
 
  function setOutput(name, value) {
     const filePath = process.env['GITHUB_OUTPUT'] || ''
 
     if (filePath) {
-        //return issueFileCommand('OUTPUT', prepareKeyValueMessage(name, value))
+        fs.appendFileSync(filePath, `${name}=${value}${os.EOL}`)
+        return;
     }
 
     process.stdout.write(os.EOL)
-    issueCommand('set-output', {name}, value)
-}
-
-
-function issueFileCommand(command, message) {
-    const filePath = process.env[`GITHUB_${command}`]
-    if (!filePath) {
-        throw new Error(
-            `Unable to find environment variable for file command ${command}`
-        )
-    }
-    if (!fs.existsSync(filePath)) {
-        throw new Error(`Missing file at path: ${filePath}`)
-    }
-    console.log(`${toCommandValue(message)}${os.EOL}`)
-    fs.appendFileSync(filePath, `${toCommandValue(message)}${os.EOL}`, {
-        encoding: 'utf8'
-    })
-}
-
-function issueCommand(
-    command,
-    properties,
-    message
-) {
-    const cmd = new Command(command, properties, message)
-    process.stdout.write(cmd.toString() + os.EOL)
+     const cmd = new Command('set-output', name, value)
+     process.stdout.write(cmd.toString() + os.EOL)
 }
 
 searchForVersion('./');
