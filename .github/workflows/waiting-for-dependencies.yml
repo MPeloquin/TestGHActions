@@ -1,7 +1,10 @@
 name: GitHub Actions Demo2
 run-name: ${{ github.actor }} checking your dependencies 🚀
 
-on: push
+on:
+  pull_request:
+    paths:
+      - '**/package.json'
 
 jobs:
     hello:
