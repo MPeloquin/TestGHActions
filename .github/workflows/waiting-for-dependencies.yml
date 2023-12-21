@@ -19,7 +19,7 @@ jobs:
               id: check-dependencies
             - name: Get the output time
               run: echo "The time was ${{ steps.check-dependencies.outputs.has-dependency-in-progress }}"
-            - run: gh pr edit ${{ github.event.pull_request.number }} --add-label Waiting for Dependency Update
+            - run: gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting for Dependency Update"
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 GH_REPO: ${{ github.repository }}
