@@ -10,6 +10,7 @@ function searchForVersion(rootFolder, depth = 0) {
         return;
     }
     const files = fs.readdirSync(rootFolder);
+    console.log(files);
 
     files.forEach((file) => {
         if (file === '.git' || file === '.github' || found) {
