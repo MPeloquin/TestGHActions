@@ -9,7 +9,5 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Waiting for dependency update label found
-              if: "contains( github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')"
-              run: exit 1
-            - name: Waiting for dependency update label not found
+              if: "!contains( github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')"
               run: exit 0
