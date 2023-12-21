@@ -1,4 +1,4 @@
-name: Up-to-date dependencies check
+name: Dependencies check
 
 on:
   pull_request:
@@ -6,7 +6,6 @@ on:
 
 jobs:
     check-dependencies:
-        name: Checking package.json files
         runs-on: ubuntu-latest
         permissions:
           pull-requests: write
