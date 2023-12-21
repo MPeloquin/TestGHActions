@@ -13,9 +13,10 @@ function searchForVersion(rootFolder, version, depth = 0) {
     files.forEach((file) => {
         // Get the full path of the current file
         const filePath = path.join(rootFolder, file);
-        console.log(file, filePath);
+        console.log(depth, file, filePath);
         // Check if the current file is a directory
         if (fs.statSync(filePath).isDirectory()) {
+            console.log('is directory', filePath);
             // If it is a directory, recursively call the function on that directory
             searchForVersion(filePath, version, ++depth);
         } else if (file === 'package.json') {
@@ -50,7 +51,7 @@ function checkDependencies(dependencies, version, filePath) {
 }
 
 // Specify the root folder to start the search
-const rootFolder = '.';
+const rootFolder = './';
 
 // Specify the version to search for
 const targetVersion = '1.0.0';
