@@ -16,8 +16,6 @@ jobs:
             - name: Check dependencies
               uses: ./.github/actions/check-dependencies-in-progress/
               id: check-dependencies
-            - name: Get the output time
-              run: echo "The time was ${{ steps.check-dependencies.outputs.has-dependency-in-progress }}"
             - run: gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
               if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
               env:

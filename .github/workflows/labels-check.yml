@@ -2,12 +2,12 @@ name: dependencies-label-check
 
 on:
     pull_request:
-        types: [labeled, unlabeled]
+        types: [labeled, unlabeled, opened, synchronize, reopened]
 
 jobs:
     check-waiting-for-dependency:
         runs-on: ubuntu-latest
-        if: "!contains( github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')"
+        if: "contains( github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')"
         steps:
-            - name: Waiting for dependency update label not found
-              run: exit 0
+            - name: Waiting for dependency update label found
+              run: exit 1
