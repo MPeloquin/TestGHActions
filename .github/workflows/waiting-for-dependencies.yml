@@ -1,4 +1,4 @@
-name: GitHub Actions Demo2
+name: Check for dependencies updates
 run-name: ${{ github.actor }} checking your dependencies 🚀
 
 on:
@@ -13,7 +13,7 @@ jobs:
             - name: checkout
               uses: actions/checkout@v4
             - name: Check dependencies
-              uses: ./.github/actions/waiting-for-dependencies-action/
-              id: dependencies
+              uses: ./.github/actions/check-dependencies-in-progress/
+              id: check-dependencies
             - name: Get the output time
-              run: echo "The time was ${{ steps.dependencies.outputs.in-progress-dependency-found }}"
+              run: echo "The time was ${{ steps.check-dependencies.outputs.has-dependency-in-progress }}"

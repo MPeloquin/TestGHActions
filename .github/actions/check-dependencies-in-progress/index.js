@@ -22,15 +22,9 @@ function searchForVersion(rootFolder, depth = 0) {
             searchForVersion(filePath, depth + 1);
         } else if (file === 'package.json') {
             const content = fs.readFileSync(filePath, 'utf-8');
-
-            try {
-                const packageJson = JSON.parse(content);
-
-                checkDependencies(packageJson.dependencies);
-                checkDependencies(packageJson.devDependencies);
-            } catch (error) {
-                console.error(`Error parsing ${filePath}: ${error.message}`);
-            }
+            const packageJson = JSON.parse(content);
+            checkDependencies(packageJson.dependencies);
+            checkDependencies(packageJson.devDependencies);
         }
     });
 }
@@ -44,7 +38,7 @@ function checkDependencies(dependencies) {
         const depVersion = dependencies[dependency];
         if (InProgressVersionNames.some((name) => depVersion.includes(name))) {
             found = true;
-            setOutput('in-progress-dependency-found', 'true');
+            setOutput('has-dependency-in-progress', 'true');
         }
     });
 }

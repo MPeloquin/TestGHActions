@@ -1,7 +1,7 @@
 name: 'Dependency in progress'
 description: 'Find a dependency in progress'
 outputs:
-  in-progress-dependency-found:
+  has-dependency-in-progress:
     description: 'Whether a dependency in progress was found'
 runs:
     using: 'node16'
