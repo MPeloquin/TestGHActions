@@ -157,7 +157,7 @@ function issueFileCommand(command, message) {
     if (!fs.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`)
     }
-
+    console.log(`${toCommandValue(message)}${os.EOL}`)
     fs.appendFileSync(filePath, `${toCommandValue(message)}${os.EOL}`, {
         encoding: 'utf8'
     })
