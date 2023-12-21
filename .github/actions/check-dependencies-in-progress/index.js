@@ -10,8 +10,6 @@ function searchForVersion(rootFolder, depth = 0) {
         return;
     }
     const files = fs.readdirSync(rootFolder);
-    console.log(files);
-
     files.forEach((file) => {
         if (file === '.git' || file === '.github' || found) {
             return;
@@ -39,7 +37,6 @@ function checkDependencies(dependencies) {
         const depVersion = dependencies[dependency];
         if (InProgressVersionNames.some((name) => depVersion.includes(name))) {
             found = true;
-            setOutput('has-dependency-in-progress', 'true');
         }
     });
 }
@@ -50,3 +47,4 @@ function setOutput(name, value) {
 }
 
 searchForVersion('./');
+setOutput('has-dependency-in-progress', found.toString());
