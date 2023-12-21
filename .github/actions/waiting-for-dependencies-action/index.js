@@ -40,7 +40,7 @@ function checkDependencies(dependencies) {
         Object.keys(dependencies).forEach((dependency) => {
             const depVersion = dependencies[dependency];
             if (depVersion.includes('-fix-') || depVersion.includes('-feat-')) {
-                console.log(depVersion);
+                console.log(dependency, depVersion);
                 setOutput('time', 'true');
             }
         });
