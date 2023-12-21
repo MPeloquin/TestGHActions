@@ -2,10 +2,11 @@ const fs = require('fs');
 const path = require('path');
 
 // Function to recursively search for dependencies with a specific version
-function searchForVersion(rootFolder, version, depth = 0) {
+function searchForVersion(rootFolder, version, depth) {
     if (depth >= 3) {
         return;
     }
+    depth++;
     // Get the list of files in the current folder
     const files = fs.readdirSync(rootFolder);
 
@@ -18,7 +19,7 @@ function searchForVersion(rootFolder, version, depth = 0) {
         if (fs.statSync(filePath).isDirectory()) {
             console.log('is directory', filePath);
             // If it is a directory, recursively call the function on that directory
-            searchForVersion(filePath, version, ++depth);
+            searchForVersion(filePath, version, depth);
         } else if (file === 'package.json') {
             // If it is a package.json file, read its content
             const content = fs.readFileSync(filePath, 'utf-8');
@@ -57,4 +58,4 @@ const rootFolder = './';
 const targetVersion = '1.0.0';
 
 // Start the search
-searchForVersion(rootFolder, targetVersion);
+searchForVersion(rootFolder, targetVersion, 0);
