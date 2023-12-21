@@ -103,7 +103,7 @@ class Command {
         return cmdStr
     }
 }
-export function prepareKeyValueMessage(key, value) {
+function prepareKeyValueMessage(key, value) {
     const delimiter = `ghadelimiter_${123}`
     const convertedValue = toCommandValue(value)
 
@@ -126,7 +126,7 @@ export function prepareKeyValueMessage(key, value) {
 }
 
 
-export function toCommandValue(input) {
+function toCommandValue(input) {
     if (input === null || input === undefined) {
         return ''
     } else if (typeof input === 'string' || input instanceof String) {
@@ -149,7 +149,7 @@ function setOutput(key, value) {
     issueCommand('set-output', {name}, toCommandValue(value))
 }
 
-export function issueFileCommand(command, message) {
+function issueFileCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`]
     if (!filePath) {
         throw new Error(
@@ -165,7 +165,7 @@ export function issueFileCommand(command, message) {
     })
 }
 
-export function issueCommand(
+function issueCommand(
     command,
     properties,
     message
