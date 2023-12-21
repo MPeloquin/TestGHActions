@@ -9,16 +9,19 @@ jobs:
     check-dependencies:
         name: Checking package.json files
         runs-on: ubuntu-latest
+        permissions:
+          issues: write
         steps:
             - name: checkout
               uses: actions/checkout@v4
-              with:
-                sparse-checkout: | 
-                  apps/**/package.json
-                  package.json
-                  .github
             - name: Check dependencies
               uses: ./.github/actions/check-dependencies-in-progress/
               id: check-dependencies
             - name: Get the output time
               run: echo "The time was ${{ steps.check-dependencies.outputs.has-dependency-in-progress }}"
+            - run: gh pr edit "$NUMBER" --add-label <name>
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GH_REPO: ${{ github.repository }}
+                NUMBER: ${{ github.event.pull_request.number }}
+                LABELS: Waiting for Dependency Update
