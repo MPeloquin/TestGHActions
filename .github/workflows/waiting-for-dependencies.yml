@@ -9,5 +9,7 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v4
-            - name: my own action
+            - name: hello
               uses: ./.github/actions/waiting-for-dependencies-action/
+            - name: Get the output time
+              run: echo "The time was ${{ steps.hello.outputs.time }}"
