@@ -1,5 +1,4 @@
-name: Check for dependencies updates
-run-name: Checking your dependencies 🚀
+name: Checking for dependencies updates
 
 on:
   pull_request:
