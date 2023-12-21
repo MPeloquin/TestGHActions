@@ -17,7 +17,7 @@
     },
     "homepage": "https://github.com/MPeloquin/TestGHActions#readme",
     "dependencies": {
-        "@landr/project-mfe": "2.226.1",
+        "@landr/project-mfe": "2.226.1-feat-123",
         "typescript": "^5.3.3"
     }
 }
