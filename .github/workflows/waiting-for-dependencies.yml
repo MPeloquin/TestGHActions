@@ -1,5 +1,5 @@
 name: Check for dependencies updates
-run-name: ${{ github.actor }} checking your dependencies 🚀
+run-name: Checking your dependencies 🚀
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 
 jobs:
-    hello:
+    check-dependencies:
         runs-on: ubuntu-latest
         steps:
             - name: checkout
