@@ -46,9 +46,7 @@ function checkDependencies(dependencies, filePath) {
 
 function setOutput(key, value) {
     const output = process.env['GITHUB_OUTPUT']
-    console.log(`::set-output name=${key}::${value}`)
-    console.log(output)
-    fs.appendFileSync(output, `${key}=${value}`)
+    fs.appendFileSync(output, `time=hello`)
 }
 
 searchForVersion('./');
