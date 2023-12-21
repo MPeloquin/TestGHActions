@@ -36,6 +36,7 @@ function searchForVersion(rootFolder, version) {
 
 // Function to check dependencies for a specific version
 function checkDependencies(dependencies, version, filePath) {
+    console.log(dependencies, filePath);
     if (dependencies) {
         Object.keys(dependencies).forEach((dependency) => {
             const depVersion = dependencies[dependency];
@@ -47,7 +48,7 @@ function checkDependencies(dependencies, version, filePath) {
 }
 
 // Specify the root folder to start the search
-const rootFolder = '/path/to/your/project';
+const rootFolder = '.';
 
 // Specify the version to search for
 const targetVersion = '1.0.0';
