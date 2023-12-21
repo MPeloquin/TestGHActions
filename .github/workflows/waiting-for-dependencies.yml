@@ -2,7 +2,8 @@ name: Check for dependencies updates
 run-name: ${{ github.actor }} checking your dependencies 🚀
 
 on:
-  pull_request
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 
 jobs:
