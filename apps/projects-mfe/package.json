@@ -17,7 +17,7 @@
     },
     "homepage": "https://github.com/MPeloquin/TestGHActions#readme",
     "dependencies": {
-        "@landr/project-mfe": "2.226.1-fix-CORE-11600-plugins-perpetual-upsell-5460.0",
+        "@landr/project-mfe": "2.226.1",
         "typescript": "^5.3.3"
     }
 }
