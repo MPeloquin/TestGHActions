@@ -27,7 +27,7 @@ jobs:
                 GH_REPO: ${{ github.repository }}
               run: |
                 gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
-                exit 1
+                exit "You have some dependencies in progress. Please update them before merging."
             - name: Remove label
               if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
               env:
