@@ -28,3 +28,6 @@ jobs:
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 GH_REPO: ${{ github.repository }}
+    check-label:
+      name: Check label
+      uses: ./.github/workflows/labels-check.yml@main
