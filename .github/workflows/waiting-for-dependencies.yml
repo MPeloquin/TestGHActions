@@ -2,6 +2,9 @@ name: Dependencies check
 
 on:
   pull_request:
+    # Run on pull request open/synchronize for normal commits
+    # Allow to rerun when manually removing the Waiting For Dependency Update label
+    # So the action is not blocking in case someone really needs to merge with a dependency in progress
     types: [opened, synchronize, reopened, labeled, unlabeled]
 
 jobs:
@@ -13,9 +16,6 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v4
-            - name: test
-              run: |
-                echo ${{ github.event.action }}
             - name: Check dependencies
               if: github.event.action != 'labeled' && github.event.action != 'unlabeled'
               id: check-dependencies
@@ -25,7 +25,10 @@ jobs:
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 GH_REPO: ${{ github.repository }}
-              run: gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
+              run: | 
+                gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
+                echo "::error::You have some dependencies in progress. Please update them before merging."
+                exit 1
             - name: Remove label
               if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
               env:
@@ -33,12 +36,7 @@ jobs:
                 GH_REPO: ${{ github.repository }}
               run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "Waiting For Dependency Update"
             - name: Check label
-              if: github.event.action == 'labeled' || github.event.action == 'unlabeled' && contains(github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')
-              run: |
-                echo "::error::You have some dependencies in progress. Please update them before merging."
-                exit 1
-            - name: Check versions
-              if: github.event.action != 'labeled' && github.event.action != 'unlabeled' && steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
+              if: (github.event.action == 'labeled' || github.event.action == 'unlabeled') && contains(github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')
               run: |
                 echo "::error::You have some dependencies in progress. Please update them before merging."
                 exit 1
