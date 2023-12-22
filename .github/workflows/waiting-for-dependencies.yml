@@ -33,4 +33,5 @@ jobs:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 GH_REPO: ${{ github.repository }}
             - name: Check label
-              uses: ./.github/workflows/labels-check.yml
+              if: "contains( github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')"
+              run: exit 1
