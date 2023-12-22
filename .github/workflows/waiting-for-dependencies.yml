@@ -6,6 +6,7 @@ on:
 
 jobs:
     check-dependencies:
+        name: Dependencies check
         runs-on: ubuntu-latest
         permissions:
           pull-requests: write
