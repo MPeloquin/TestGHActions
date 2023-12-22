@@ -1,0 +1,36 @@
+{
+    "name": "testghactions",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "c": "git add . && git commit -m 'test' && git push",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/MPeloquin/TestGHActions.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/MPeloquin/TestGHActions/issues"
+    },
+    "prettier": {
+        "singleQuote": true,
+        "printWidth": 80,
+        "editor.formatOnSave": true,
+        "proseWrap": "always",
+        "tabWidth": 4,
+        "requireConfig": false,
+        "useTabs": false,
+        "trailingComma": "none",
+        "bracketSpacing": true,
+        "jsxBracketSameLine": false,
+        "semi": true
+    },
+    "homepage": "https://github.com/MPeloquin/TestGHActions#readme",
+    "devDependencies": {
+        "prettier": "^3.1.1"
+    }
+}

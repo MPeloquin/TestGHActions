@@ -1,0 +1,8 @@
+name: 'Dependency in progress'
+description: 'Find a dependency in progress'
+outputs:
+  has-dependency-in-progress:
+    description: 'Whether a dependency in progress was found'
+runs:
+    using: 'node16'
+    main: 'index.js'

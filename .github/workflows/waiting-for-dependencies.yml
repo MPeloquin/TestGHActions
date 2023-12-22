@@ -1,0 +1,30 @@
+name: Dependencies check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+    check-dependencies:
+        name: Dependencies check
+        runs-on: ubuntu-latest
+        permissions:
+          pull-requests: write
+        steps:
+            - name: checkout
+              uses: actions/checkout@v4
+            - name: Check dependencies
+              id: check-dependencies
+              uses: ./.github/actions/check-dependencies-in-progress/
+            - name: Add label
+              run: gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
+              if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GH_REPO: ${{ github.repository }}
+            - name: Remove label
+              run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "Waiting For Dependency Update"
+              if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GH_REPO: ${{ github.repository }}

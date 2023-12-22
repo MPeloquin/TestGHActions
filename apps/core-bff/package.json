@@ -1,0 +1,23 @@
+{
+    "name": "core-bff",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/MPeloquin/TestGHActions.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/MPeloquin/TestGHActions/issues"
+    },
+    "homepage": "https://github.com/MPeloquin/TestGHActions#readme",
+    "dependencies": {
+        "@landr/core-bff": "2.226.1",
+        "typescript": "^5.3.3"
+    }
+}
