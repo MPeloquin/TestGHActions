@@ -25,10 +25,7 @@ jobs:
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 GH_REPO: ${{ github.repository }}
-              run: |
-                gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
-                echo "::error::You have some dependencies in progress. Please update them before merging."
-                exit 1
+              run: gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
             - name: Remove label
               if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
               env:
@@ -36,5 +33,7 @@ jobs:
                 GH_REPO: ${{ github.repository }}
               run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "Waiting For Dependency Update"
             - name: Check label
-              if: "contains( github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')"
-              run: exit 1
+              if: contains(github.event.pull_request.labels.*.name, 'Waiting For Dependency Update') || steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
+              run: |
+                echo "::error::You have some dependencies in progress. Please update them before merging."
+                exit 1
