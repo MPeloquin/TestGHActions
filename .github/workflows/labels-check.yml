@@ -9,5 +9,6 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Waiting For Dependency Update label found
-              if: "!contains( github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')"
+              if: "contains( github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')"
               run: exit 1
+            
