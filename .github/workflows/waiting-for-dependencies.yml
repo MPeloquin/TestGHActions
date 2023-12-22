@@ -17,6 +17,7 @@ jobs:
               run: |
                 echo ${{ github.event.action }}
             - name: Check dependencies
+              if: github.event.action != 'labeled' && github.event.action != 'unlabeled'
               id: check-dependencies
               uses: ./.github/actions/check-dependencies-in-progress/
             - name: Add label
