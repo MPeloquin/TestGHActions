@@ -9,6 +9,7 @@ jobs:
     name: Check waiting for dependency update
     runs-on: ubuntu-latest
 
+    # Grant permission to write commit statuses
     permissions:
       statuses: write
       pull-requests: write
@@ -85,31 +86,11 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "Waiting For Dependency Update"
 
-      - name: 'Report Success Status'
-        if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: context.payload.pull_request.head.sha,
-              state: 'success',
-              description: 'All dependencies are on master versions.',
-              context: 'Dependency Policy' // This is the name of your custom check
-            })
-
-      - name: 'Report Pending Status'
-        # This step runs only if the validation script exited with 1
+      - name: Fail on dependency in progress
         if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: context.payload.pull_request.head.sha,
-              state: 'pending',
-              description: 'Waiting for dev dependencies to be updated.',
-              context: 'Dependency Policy' // This must match the name above
-            })
+        run: |
+          echo "::error::You have some dependencies in progress. Please update them before merging."
+          echo "If you want to allow some in-progress versions, you can add them to the 'allowedInProgressVersions' array in your package.json file."
+          echo "For example, in your package.json:"
+          echo "\"allowedInProgressVersions\": [\"1.0.0-feat-some-feature\"]"
+          exit 78
