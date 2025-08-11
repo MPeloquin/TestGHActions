@@ -9,9 +9,11 @@ jobs:
     name: Check waiting for dependency update
     runs-on: ubuntu-latest
 
-    # Grant permission to write commit statuses
     permissions:
       statuses: write
+      pull-requests: write
+      contents: read
+      repository-projects: write
 
     steps:
       - uses: actions/checkout@v4
