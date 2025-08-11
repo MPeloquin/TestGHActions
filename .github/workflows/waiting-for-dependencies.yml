@@ -86,7 +86,7 @@ jobs:
         run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "Waiting For Dependency Update"
 
       - name: 'Report Success Status'
-        if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
+        if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
         uses: actions/github-script@v7
         with:
           script: |
@@ -101,7 +101,7 @@ jobs:
 
       - name: 'Report Pending Status'
         # This step runs only if the validation script exited with 1
-        if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
+        if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
         uses: actions/github-script@v7
         with:
           script: |
