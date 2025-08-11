@@ -2,41 +2,112 @@ name: Dependencies check
 
 on:
   pull_request:
-    # Run on pull request open/synchronize for normal commits
-    # Allow to rerun when manually removing the Waiting For Dependency Update label
-    # So the action is not blocking in case someone really needs to merge with a dependency in progress
-    types: [opened, synchronize, reopened, labeled, unlabeled]
+    types: [opened, synchronize, reopened]
 
 jobs:
-    check-dependencies:
-        name: Check waiting for dependency update
-        runs-on: ubuntu-latest
-        permissions:
-          pull-requests: write
-        steps:
-            - name: checkout
-              uses: actions/checkout@v4
-            - name: Check dependencies
-              if: github.event.action != 'labeled' && github.event.action != 'unlabeled'
-              id: check-dependencies
-              uses: ./.github/actions/check-dependencies-in-progress/
-            - name: Add label
-              if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                GH_REPO: ${{ github.repository }}
-              run: | 
-                gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
-                echo "::error::You have some dependencies in progress. Please update them before merging."
-                exit 1
-            - name: Remove label
-              if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                GH_REPO: ${{ github.repository }}
-              run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "Waiting For Dependency Update"
-            - name: Check label
-              if: (github.event.action == 'labeled' || github.event.action == 'unlabeled') && contains(github.event.pull_request.labels.*.name, 'Waiting For Dependency Update')
-              run: |
-                echo "::error::You have some dependencies in progress. Please update them before merging."
-                exit 1
+  check-dependencies:
+    name: Check waiting for dependency update
+    runs-on: ubuntu-latest
+
+    # Grant permission to write commit statuses
+    permissions:
+      statuses: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check dependencies
+        id: check-dependencies
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            const InProgressVersionNames = ['-fix-', '-feat-', '-canary'];
+
+            function searchForVersion(rootFolder, depth = 0) {
+                if (depth >= 3) {
+                    return;
+                }
+                const files = fs.readdirSync(rootFolder);
+                return files.some((file) => {
+                    if (file === '.git' || file === '.github') {
+                        return;
+                    }
+            
+                    const filePath = path.join(rootFolder, file);
+            
+                    if (fs.statSync(filePath).isDirectory()) {
+                        return searchForVersion(filePath, depth + 1);
+                    } else if (file === 'package.json') {
+                        const content = fs.readFileSync(filePath, 'utf-8');
+                        const packageJson = JSON.parse(content);
+                        const excludedVersions = packageJson.allowedInProgressVersions || [];
+            
+                        return checkDependencies(packageJson.dependencies, excludedVersions) || checkDependencies(packageJson.devDependencies, excludedVersions);
+                    }
+                });
+            }
+            
+            function checkDependencies(dependencies, excludedVersions) {
+                if (!dependencies) {
+                    return;
+                }
+            
+                const dependenciesInProgress = Object.values(dependencies)
+                    .filter((depVersion) => !excludedVersions.some((excluded) => excluded === depVersion))
+                    .filter((depVersion) => InProgressVersionNames.some((name) => depVersion.includes(name)));
+            
+                if(dependenciesInProgress.length > 0) {
+                    console.log('Found dependencies in progress: ', dependenciesInProgress);
+                }
+            
+                return dependenciesInProgress.length > 0;
+            }
+            
+            const found = searchForVersion('./');
+            core.setOutput('has-dependency-in-progress', found.toString());
+
+      - name: Add label
+        if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: gh pr edit ${{ github.event.pull_request.number }} --add-label "Waiting For Dependency Update"
+
+      - name: Remove label
+        if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "Waiting For Dependency Update"
+
+      - name: 'Report Success Status'
+        if: steps.check-dependencies.outputs.has-dependency-in-progress == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.payload.pull_request.head.sha,
+              state: 'success',
+              description: 'All dependencies are on master versions.',
+              context: 'Dependency Policy' // This is the name of your custom check
+            })
+
+      - name: 'Report Pending Status'
+        # This step runs only if the validation script exited with 1
+        if: steps.check-dependencies.outputs.has-dependency-in-progress == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.payload.pull_request.head.sha,
+              state: 'pending',
+              description: 'Waiting for dev dependencies to be updated.',
+              context: 'Dependency Policy' // This must match the name above
+            })
